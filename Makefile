@@ -57,16 +57,12 @@ dependencies: Target3
 Target3:	
 #some command(but tabs before that)
 	@echo "gcc dummy use"
-	gcc
+	-gcc	
+# "-" means ignore errors, so the command will be executed even if there is an error
 
-#phony target example (unreal target)
-
-clean:
-	@echo "cleaning up"
-	rm -f *.o *.exe
-	@echo "done"
-
-.PHONY: clean #some other phony target, .PHONY can take multiple targets
+#all target
+all: make_dir create_file
+	@echo "all done"
 
 #creating 3 directories d1, d2, d3:
 make_dir:
@@ -91,3 +87,12 @@ remove_file:
 	@echo "removing files"
 	rm -f d1/f1 d2/f2 d3/f3
 	@echo "done"
+
+#phony target example (unreal target)
+# will remove files and folders, make commands silent (doesn't show the command)
+clean:
+	@echo "removing files and directories"
+	rm -rf d1 d2 d3
+	@echo "done"
+	
+.PHONY: clean #some other phony target, .PHONY can take multiple targets
