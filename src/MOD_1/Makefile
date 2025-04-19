@@ -143,13 +143,35 @@
 # 5. Optimization: `gcc -O2 main.cpp -o main`
 
 #for now, we will separate a new step between Input and Output, which is the object file, so we will have:
-OUTPUT = ../../bins/MOD_1
+# OUTPUT = ../../bins/MOD_1
+# INPUT = main.cpp
+# OBJ1 = ../../objs/MOD_1.o
+
+# $(OUTPUT): $(OBJ1)
+# 	g++ $< -o $@
+
+# $(OBJ1): $(INPUT)
+# 	g++ -c $< -o $@
+
+#this should also apply to libraries, as libraries are dependencies, so we should separate them too:
+# to separate libraries, we can use the -l flag, which is used to link against libraries
+# we can also use -lm to link against the math library
+# to know more about each library's specific flags, check the man page for the library
+OUTPUT = ../../bins/MOD_1	
 INPUT = main.cpp
 OBJ1 = ../../objs/MOD_1.o
+LIBS = -lm
 
+#notice that libraries are written as dependencies with objects, since it is linker stage.
 $(OUTPUT): $(OBJ1)
-	g++ $< -o $@
+	g++ $< -o $@ $(LIBS) 
 
 $(OBJ1): $(INPUT)
-	gcc -c $< -o $@
+	g++ -c $< -o $@
 
+#add clean target to remove all generated files
+.PHONY: clean
+clean:
+	@echo "removing files and directories"
+	rm -rf $(OUTPUT) $(OBJ1)
+	@echo "done"
