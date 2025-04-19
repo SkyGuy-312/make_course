@@ -98,7 +98,58 @@
 # .PHONY: clean #some other phony target, .PHONY can take multiple targets
 
 #default target
-default:
-	g++ main.cpp -o ../../bins/MOD_1
-	@echo "default target done"
+# default:
+# 	g++ main.cpp -o ../../bins/MOD_1
+# 	@echo "default target done"
+
+#since ../../bins/MOD_1 is the target, we can have it as the target
+# ../../bins/MOD_1: main.cpp
+# 	g++ main.cpp -o ../../bins/MOD_1
+# 	@echo "default target done"
+
+#this isn't the best case, sense if we changed target name, we'd change it in 2 locations, so it is better to use a variable:
+# OUTPUT = ../../bins/MOD_1
+# $(OUTPUT): main.cpp
+# 	g++ main.cpp -o $(OUTPUT)
+# 	@echo "default target done"
+
+#same goes for main.cpp, we can use a variable for it too
+# OUTPUT = ../../bins/MOD_1
+# INPUT = main.cpp
+# $(OUTPUT): $(INPUT)
+# 	g++ $(INPUT) -o $(OUTPUT)
+# 	@echo "default target done"
+
+#we can also use some operators that refer to dependencies, 
+#like $^, which refers to all dependencies and $< which refers to the first dependency, 
+#and $@ which refers to the target
+# OUTPUT = ../../bins/MOD_1
+# INPUT = main.cpp
+# $(OUTPUT): $(INPUT)
+# 	g++ $< -o $@
+
+#usually, GCC chaing goes like this:
+# 1. Preprocessing: The preprocessor handles directives (e.g., #include, #define) and generates an intermediate file.
+# 2. Compilation: The compiler translates the preprocessed code into assembly language.
+# 3. Assembly: The assembler converts the assembly code into machine code (object file).
+# 4. Linking: The linker combines object files and libraries to create the final executable.
+# 5. Optimization: The compiler may apply optimizations to improve performance.
+
+# each of these steps can be done separately, for each step there is a command:
+# 1. Preprocessing: `gcc -E main.cpp -o main.i`
+# 2. Compilation: `gcc -S main.i -o main.s`
+# 3. Assembly: `gcc -c main.s -o main.o`
+# 4. Linking: `gcc main.o -o main`
+# 5. Optimization: `gcc -O2 main.cpp -o main`
+
+#for now, we will separate a new step between Input and Output, which is the object file, so we will have:
+OUTPUT = ../../bins/MOD_1
+INPUT = main.cpp
+OBJ1 = ../../objs/MOD_1.o
+
+$(OUTPUT): $(OBJ1)
+	g++ $< -o $@
+
+$(OBJ1): $(INPUT)
+	gcc -c $< -o $@
 
