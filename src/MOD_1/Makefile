@@ -172,22 +172,42 @@
 #make can also tell you about warnings and errors,for example, -Wall will show all warnings,
 # -Werror will treat warnings as errors, -g will add debugging information,
 #adding -Wall to last example:
-OUTPUT = ../../bins/MOD_1	
-INPUT = main.cpp
-OBJ1 = ../../objs/MOD_1.o
-FLAGS = -Wall -Werror
+# OUTPUT = ../../bins/MOD_1	
+# INPUT = main.cpp
+# OBJ1 = ../../objs/MOD_1.o
+# FLAGS = -Wall -Werror
+# LDFLAGS = -lm
+# $(OUTPUT): $(OBJ1)
+# 	g++ $< -o $@ $(LDFLAGS) 
+
+# $(OBJ1): $(INPUT)
+# 	g++ $(FLAGS) -c $< -o $@
+
+#now, let's write the Makefile in a more readable way,
+MODULE_NAME = MOD_1
+
+TARGET_DIR = ../../bins
+TARGET_NAME = module1_bin
+TARGET = $(TARGET_DIR)/$(TARGET_NAME)
+
+OBJ_DIR = ../../objs
+OBJ1 = $(OBJ_DIR)/$(MODULE_NAME).o
+
+CFLAGS = -Wall -Werror
 LDFLAGS = -lm
-$(OUTPUT): $(OBJ1)
-	g++ $< -o $@ $(LDFLAGS) 
 
-$(OBJ1): $(INPUT)
-	g++ $(FLAGS) -c $< -o $@
+$(TARGET): $(OBJ1)
+	@echo "Linking $>"
+	g++ $< -o $@ $(LDFLAGS)
 
-
+$(OBJ1): $(MODULE_NAME).cpp
+	@echo "Compiling $<"
+	g++ $(CFLAGS) -c $< -o $@
+	@echo "done"
 
 #add clean target to remove all generated files
 .PHONY: clean
-clean:
+clean: $(TARGET) $(OBJ1)
 	@echo "removing files and directories"
-	rm -rf $(OUTPUT) $(OBJ1)
+	rm -rf $^
 	@echo "done"
