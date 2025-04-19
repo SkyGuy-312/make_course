@@ -157,17 +157,33 @@
 # to separate libraries, we can use the -l flag, which is used to link against libraries
 # we can also use -lm to link against the math library
 # to know more about each library's specific flags, check the man page for the library
+# OUTPUT = ../../bins/MOD_1	
+# INPUT = main.cpp
+# OBJ1 = ../../objs/MOD_1.o
+# LIBS = -lm
+
+#notice that libraries are written as dependencies with objects, since it is linker stage.
+# $(OUTPUT): $(OBJ1)
+# 	g++ $< -o $@ $(LIBS) 
+
+# $(OBJ1): $(INPUT)
+# 	g++ -c $< -o $@
+
+#make can also tell you about warnings and errors,for example, -Wall will show all warnings,
+# -Werror will treat warnings as errors, -g will add debugging information,
+#adding -Wall to last example:
 OUTPUT = ../../bins/MOD_1	
 INPUT = main.cpp
 OBJ1 = ../../objs/MOD_1.o
-LIBS = -lm
-
-#notice that libraries are written as dependencies with objects, since it is linker stage.
+FLAGS = -Wall -Werror
+LDFLAGS = -lm
 $(OUTPUT): $(OBJ1)
-	g++ $< -o $@ $(LIBS) 
+	g++ $< -o $@ $(LDFLAGS) 
 
 $(OBJ1): $(INPUT)
-	g++ -c $< -o $@
+	g++ $(FLAGS) -c $< -o $@
+
+
 
 #add clean target to remove all generated files
 .PHONY: clean
