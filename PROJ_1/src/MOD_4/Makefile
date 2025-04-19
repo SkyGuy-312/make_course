@@ -4,6 +4,8 @@ TARGET_DIR = ../../libs
 TARGET_NAME = lib$(MODULE_NAME).a	#precompiled static library
 TARGET = $(TARGET_DIR)/$(TARGET_NAME)
 
+INC_DIR = ../../shared_headers
+
 OBJ_DIR = ../../objs
 OBJ1 = $(OBJ_DIR)/$(MODULE_NAME).o
 
@@ -34,6 +36,11 @@ $(TEST_TARGET): $(OBJ2) $(TARGET)
 $(OBJ2): $(TEST_MODULE_NAME).cpp
 	@echo "Compiling $<"
 	@g++ $(CFLAGS) -c $< -o $@
+	@echo "done"
+
+install:
+	@echo "installing $<"
+	@cp $(MODULE_NAME).h $(INC_DIR)
 	@echo "done"
 
 .PHONY: clean test
