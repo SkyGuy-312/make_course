@@ -62,3 +62,4 @@ test: $(TEST_MODULE_TARGET)
 	@echo "running test"
 	@./$<
 	@echo "done"
+install: $(TARGET)
