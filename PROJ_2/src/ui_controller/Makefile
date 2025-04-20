@@ -6,8 +6,8 @@
 # BUILD_TYPE = $(RELEASE)
 BUILD_TYPE = $(DEBUG)
 
-MODULE_NAME = db_mgr
-TARGET_NAME = db_mgr
+MODULE_NAME = ui_controller
+TARGET_NAME = uic
 
 PROJECT_ROOT_PATH = ../..
 OBJ_DIR = $(PROJECT_ROOT_PATH)/objs/$(MODULE_NAME)#separate folder for each module
@@ -27,8 +27,8 @@ endif
 LIBRARY_DIR = $(INSTALLATION_PATH)/libs
 
 # target directory
-TARGET_DIR = $(LIBRARY_DIR)
-TARGET = $(TARGET_DIR)/lib$(TARGET_NAME).so
+TARGET_DIR = $(INSTALLATION_PATH)/bins
+TARGET = $(TARGET_DIR)/$(TARGET_NAME).a
 
 
 
@@ -49,13 +49,10 @@ endif
 # std flag
 STDFLAG = -std=c++17
 
-#no main Object file
-# MAIN_OBJ = $(OBJ_DIR)/main.o
+MAIN_OBJ = $(OBJ_DIR)/main.o
 
 SOURCE1 = $(MODULE_NAME)
 OBJ1 = $(OBJ_DIR)/$(SOURCE1).o
-SOURCE2 = db_reader
-OBJ2 = $(OBJ_DIR)/$(SOURCE2).o
 # SOURCE3 =
 # OBJ3 = $(OBJ_DIR)/$(SOURCE3).o
 
@@ -64,7 +61,7 @@ OBJ2 = $(OBJ_DIR)/$(SOURCE2).o
 	2. Add *.o in ALL_OBJS\
 	3. Add instruction to build target
 
-ALL_OBJS = $(OBJ1) $(OBJ2)#$(MAIN_OBJ)
+ALL_OBJS = $(OBJ1) $(MAIN_OBJ)
 
 # INC variable to shared headers
 INC = -I./ -I$(PROJECT_ROOT_PATH)/shared_headers
@@ -92,10 +89,10 @@ CCFLAGS = $(STDFLAG) $(BUILD_TYPE) $(DEFINES) $(INC) $(WARN)
 # Note: Add the "<path-to-library>  -llibraryname" by keeping space in between as shown below.\
 if library is present in the current directrory, we can use path as "L."
 # dbmgr has depenedency on emp static lib
-DEP_LIBS = -L$(LIBRARY_DIR) -lemp
+# DEP_LIBS = -L$(LIBRARY_DIR) -ldb_mgr -lemp
 
 # RPATH is used for linking libs in specific path
-RPATH = -Wl,-rpath=$(LIB_DIR)
+RPATH = -Wl,-rpath=$(LIBRARY_DIR)
 
 #Linker flags
 LDFLAGS = $(DEP_LIBS) $(RPATH)
@@ -104,21 +101,20 @@ LDFLAGS = $(DEP_LIBS) $(RPATH)
 all: $(TARGET)
 
 $(TARGET): $(ALL_OBJS)
-	@echo "Linking $<"
+	@echo "Linking $^"
 	@$(LDXX) -shared -o $@ $^ $(LDFLAGS)
 	@make install
+	@echo "done"
+
+$(MAIN_OBJ): main.cpp
+	@echo "Compiling $<"
+	@$(CXX) $(CCFLAGS) -c $< -o $@
 	@echo "done"
 
 $(OBJ1): $(SOURCE1).cpp
 	@echo "Compiling $<"
 	@$(CXX) $(CCFLAGS) -c $< -o $@
 	@echo "done"
-
-$(OBJ2): $(SOURCE2).cpp
-	@echo "Compiling $<"
-	@$(CXX) $(CCFLAGS) -c $< -o $@
-	@echo "done"
-
 
 build_dir:
 	@echo "Creating build directory..."

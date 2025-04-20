@@ -17,7 +17,11 @@ void UI_Controller::get_emp_id_and_show_details(){
 
         auto emp = dbMgrObj.get_emp_details(id);
 
-        std::clog << "\n Employee ID: " << emp.getId() << "\nName: " << emp.getName() << "\nDesignation: " << emp.getDesignation() << std::endl;
+        if (emp.getId().empty()) {
+            std::clog << "Invalid employee ID!" << std::endl;
+        } else {
+            std::clog << "\n Employee ID: " << emp.getId() << "\nName: " << emp.getName() << "\nDesignation: " << emp.getDesignation() << std::endl;
+        }
     } while (id !="0");
 }
 

@@ -19,9 +19,6 @@ Employee DB_Mgr::get_emp_details(const std::string &emp_id) {
     Employee emp;
     DB_Reader dbrObj;
     dbrObj.read_emp_data(emp_list, emp_id, emp);
-    if (!found) {
-        std::clog << "Employee not found!" << std::endl;
-    }
     return emp;
 }
 
