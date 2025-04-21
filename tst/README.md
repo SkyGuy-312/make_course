@@ -1,0 +1,1 @@
+g++ -fPIC main.cpp ui_controller.cpp -o main.out -L. -ldb_mgr -lemp -Wl,-rpath=.

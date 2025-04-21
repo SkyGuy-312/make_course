@@ -20,7 +20,7 @@ INSTALLATION_PATH = $(shell echo $$INSTALLATION_PATH)
 # check if INSTALLATION_PATH is set
 ifeq ($(INSTALLATION_PATH),)
 $(warning "INSTALLATION_PATH is not set. Setting INSTALLATION_PATH to default project root path...")
-	INSTALLATION_PATH = $(PROJECT_ROOT_PATH)
+INSTALLATION_PATH = $(PROJECT_ROOT_PATH)
 endif
 
 
@@ -36,7 +36,7 @@ TARGET = $(TARGET_DIR)/lib$(TARGET_NAME).a
 CXX = $(shell echo $$CXX)
 ifeq ($(CXX),)
 $(warning CXX is not set. Setting CXX to default g++) 
-	CXX = g++
+CXX = g++
 endif
 
 # C++ Linker
